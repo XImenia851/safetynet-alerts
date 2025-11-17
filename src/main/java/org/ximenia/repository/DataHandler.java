@@ -1,6 +1,8 @@
 package org.ximenia.repository;
 
-import io.micrometer.core.instrument.util.IOUtils;
+import com.jsoniter.JsonIterator;
+import com.jsoniter.output.JsonStream;
+import org.apache.commons.io.IOUtils;
 import lombok.Data;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Component;

@@ -1,4 +1,4 @@
 package org.ximenia.repository;
 
-public class MedicalRecordRepository {
+public interface MedicalRecordRepository {
 }

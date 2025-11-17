@@ -475,16 +475,3 @@
     }
   ]
 }
-```
-
----
-
-## **🔍 VÉRIFIER QUE C'EST BON**
-
-Après avoir créé le fichier, tu devrais voir dans IntelliJ :
-```
-src/
-└── main/
-└── resources/
-├── application.properties
-└── data.json ✅ (nouveau fichier)

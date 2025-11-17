@@ -1,14 +1,14 @@
 package org.ximenia.model;
 
-public class FirstStation {
+public class FireStation {
 
     private String adress;
     private String station;
 
-    public FirstStation(){
+    public FireStation(){
     }
 
-    public FirstStation(String adress, String station) {
+    public FireStation(String adress, String station) {
         this.adress = adress;
         this.station = station;
     }

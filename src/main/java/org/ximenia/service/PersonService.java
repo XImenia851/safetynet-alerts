@@ -6,6 +6,7 @@ import org.ximenia.repository.FireStationRepository;
 import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,5 +24,16 @@ public class PersonService {
     public List<Person> findAllPersons()
     {
         return personRepository.findAllPersons();
+    }
+
+
+    public List<String> findAllEmails()
+    {
+       List<String> emails = new ArrayList<>();
+       List<Person> persons = personRepository.findAllPersons();
+        for (Person person:persons) {
+            emails.add(person.getEmail());
+        }
+        return emails;
     }
 }

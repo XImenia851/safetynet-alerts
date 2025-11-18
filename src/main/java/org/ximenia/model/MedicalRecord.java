@@ -3,8 +3,8 @@ package org.ximenia.model;
 public class MedicalRecord {
     private String firstName;
     private String lastName;
-    private String medications;
-    private String allergies;
+    private String[] medications;
+    private String[] allergies;
     private String birthdate;
 
     public String getFirstName() {
@@ -23,19 +23,20 @@ public class MedicalRecord {
         this.lastName = lastName;
     }
 
-    public String getMedications() {
+
+    public String[] getMedications() {
         return medications;
     }
 
-    public void setMedications(String medications) {
+    public void setMedications(String[] medications) {
         this.medications = medications;
     }
 
-    public String getAllergies() {
+    public String[] getAllergies() {
         return allergies;
     }
 
-    public void setAllergies(String allergies) {
+    public void setAllergies(String[] allergies) {
         this.allergies = allergies;
     }
 

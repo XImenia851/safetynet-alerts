@@ -1,4 +1,18 @@
 package org.ximenia.repository;
 
-public interface PersonRepository {
+import org.springframework.stereotype.Component;
+import org.ximenia.model.Person;
+
+import java.util.List;
+
+@Component
+public class PersonRepository {
+
+    private final DataHandler dataHandler;
+    public PersonRepository(DataHandler dataHandler) {
+        this.dataHandler = dataHandler;
+    }
+    public List<Person> findAllPersons() {
+        return dataHandler.getDataContainer().getPersons();
+    }
 }

@@ -5,9 +5,10 @@ import java.util.List;
 public class DataContainer {
 
     private List<Person> persons;
-    private List<FireStation> fireStations;
-    private List<Person> getPersons()
-    {
+    private List<FireStation> firestations;
+    private List<MedicalRecord> medicalrecords;
+
+    public List<Person> getPersons() {
         return persons;
     }
 
@@ -15,11 +16,19 @@ public class DataContainer {
         this.persons = persons;
     }
 
-    public List<FireStation> getFireStations() {
-        return fireStations;
+    public List<FireStation> getFirestations() {
+        return firestations;
     }
 
-    public void setFireStations(List<FireStation> fireStations) {
-        this.fireStations = fireStations;
+    public void setFirestations(List<FireStation> firestations) {
+        this.firestations = firestations;
+    }
+
+    public List<MedicalRecord> getMedicalrecords() {
+        return medicalrecords;
+    }
+
+    public void setMedicalrecords(List<MedicalRecord> medicalrecords) {
+        this.medicalrecords = medicalrecords;
     }
 }

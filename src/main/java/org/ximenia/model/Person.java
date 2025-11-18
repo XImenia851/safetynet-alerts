@@ -3,7 +3,7 @@ package org.ximenia.model;
 public class Person {
     private  String firstName;
     private String lastName;
-    private String adress;;
+    private String address;;
     private String city;
     private String zip;
     private String phone;
@@ -15,7 +15,7 @@ public class Person {
     public Person(String firstName, String lastName, String adress, String city, String zip, String phone, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.adress = adress;
+        this.address = adress;
         this.city = city;
         this.zip = zip;
         this.phone = phone;
@@ -38,11 +38,11 @@ public class Person {
     }
 
     public String getAdress() {
-        return adress;
+        return address;
     }
 
     public void setAdress(String adress) {
-        this.adress = adress;
+        this.address = adress;
     }
 
     public String getCity() {

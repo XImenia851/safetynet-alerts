@@ -2,22 +2,22 @@ package org.ximenia.model;
 
 public class FireStation {
 
-    private String adress;
+    private String address;
     private String station;
 
     public FireStation(){
     }
 
-    public FireStation(String adress, String station) {
-        this.adress = adress;
+    public FireStation(String address, String station) {
+        this.address = address;
         this.station = station;
     }
 
-    public String getAdress() {
-        return adress;
+    public String getAddress() {
+        return address;
     }
-    public void setAdress(String adress) {
-        this.adress = adress;
+    public void setAddress(String address) {
+        this.address = address;
     }
     public String getStation() {
         return station;

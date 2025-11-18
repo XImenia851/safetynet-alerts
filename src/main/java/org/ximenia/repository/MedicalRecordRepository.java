@@ -1,4 +1,18 @@
 package org.ximenia.repository;
 
-public interface MedicalRecordRepository {
+import org.springframework.stereotype.Component;
+import org.ximenia.model.MedicalRecord;
+
+import java.util.List;
+
+@Component
+public class MedicalRecordRepository {
+
+    private final DataHandler dataHandler;
+    public MedicalRecordRepository(DataHandler dataHandler) {
+        this.dataHandler = dataHandler;
+    }
+    public List<MedicalRecord> findAllMedicalRecords() {
+        return dataHandler.getDataContainer().getMedicalrecords();
+    }
 }

@@ -15,7 +15,7 @@ public class MedicalRecordController {
         this.medicalRecordService = medicalRecordService;
     }
 
-    @GetMapping("medicalrecord")
+    @GetMapping("medicalrecords")
     public List<MedicalRecord> allMedicalRecords(){
         return medicalRecordService.findAllMedicalRecords();
     }

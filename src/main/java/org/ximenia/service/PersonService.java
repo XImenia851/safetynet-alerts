@@ -21,19 +21,45 @@ public class PersonService {
         this.personRepository = personRepository;
         this.medicalRecordRepository = medicalRecordRepository;
     }
-    public List<Person> findAllPersons()
-    {
+
+    public List<Person> findAllPersons() {
         return personRepository.findAllPersons();
     }
 
 
-    public List<String> findAllEmails()
-    {
-       List<String> emails = new ArrayList<>();
-       List<Person> persons = personRepository.findAllPersons();
-        for (Person person:persons) {
+    public List<String> findAllEmails() {
+        List<String> emails = new ArrayList<>();
+        List<Person> persons = personRepository.findAllPersons();
+        for (Person person : persons) {
             emails.add(person.getEmail());
         }
         return emails;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// correction JC V1 :
+//Public List<String> findAllEmailByCity(String city) {
+//List<String> emails = new ArrayList<>();
+// "" <Person> persons = personRepo.findAllPersons();
+//for (Person person : persons){
+//if(person.getCity(). equals(city)){
+//emails.add(person.getEmail());
+// }} return emails;
+
+
+//Version avec un stream :
+//public List<String> findAllEmailByCity(String city) {
+//return this.personRepo.findAllPersons().stream().filter(p -> p.getCity().equaols(city)).map(p -> p.getMail())

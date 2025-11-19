@@ -12,10 +12,10 @@ public class Person {
     public Person() {
     }
 
-    public Person(String firstName, String lastName, String adress, String city, String zip, String phone, String email) {
+    public Person(String firstName, String lastName, String address, String city, String zip, String phone, String email) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.address = adress;
+        this.address = address;
         this.city = city;
         this.zip = zip;
         this.phone = phone;
@@ -37,12 +37,12 @@ public class Person {
         this.lastName = lastName;
     }
 
-    public String getAdress() {
+    public String getAddress() {
         return address;
     }
 
-    public void setAdress(String adress) {
-        this.address = adress;
+    public void setAdress(String address) {
+        this.address = address;
     }
 
     public String getCity() {

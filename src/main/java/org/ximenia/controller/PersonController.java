@@ -28,4 +28,8 @@ public class PersonController {
     public List<String> findAllEmails(@RequestParam(name = "city")String email) {
         return personService.findAllEmails();
     }
+
+//    Pour trouver le numero de téléphone, il faut l'adresse, qui est en lien avec l'une des firestations
+    // faire une boucle for ? comparer les numéro de firestations avec l'adresse ?
+
 }

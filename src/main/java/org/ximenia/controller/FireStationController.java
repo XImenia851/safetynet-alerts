@@ -1,6 +1,8 @@
 package org.ximenia.controller;
 
+import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.ximenia.model.FireStation;
 import org.ximenia.service.FireStationService;
@@ -19,5 +21,10 @@ public class FireStationController {
     @GetMapping("firestation")
     public List<FireStation> allFireStations() {
         return this.fireStationService.allFireStations();
+    }
+
+    @GetMapping("phoneAlert")
+    public List<String> phoneAlert(@RequestParam("firestation") String stationNumber) {
+        return fireStationService.getPhoneAlert(stationNumber);
     }
 }

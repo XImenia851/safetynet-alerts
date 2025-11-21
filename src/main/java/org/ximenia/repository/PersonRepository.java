@@ -21,4 +21,12 @@ public class PersonRepository {
 //    public List<Person> findAllEmails() {
 //        return dataHandler.getDataContainer().getPersons();
 //    }
+
+    public Person findpersonByfirstNameAndLastName(String firstName, String lastName){
+        return dataHandler.getDataContainer().getPersons().stream() // Stream<Person>
+                .filter(p -> p.getFirstName().equals(firstName))
+                .filter(p -> p.getLastName().equals(lastName))
+                .findFirst() // Optional<Person>
+                .orElseGet(() -> new Person());
+    }
 }

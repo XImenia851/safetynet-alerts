@@ -15,4 +15,14 @@ public class MedicalRecordRepository {
     public List<MedicalRecord> findAllMedicalRecords() {
         return dataHandler.getDataContainer().getMedicalrecords();
     }
+
+    public MedicalRecord findMedicalWithFirstNameAndLastName(String firstName, String lastName) {
+        return dataHandler.getDataContainer().getMedicalrecords().stream()
+                .filter(p -> p.getFirstName().equals(firstName))
+                .filter(p -> p.getLastName().equals(lastName))
+                .findFirst()
+                .orElseGet(() -> new MedicalRecord());
+    }
 }
+
+

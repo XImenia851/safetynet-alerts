@@ -6,6 +6,7 @@ import org.ximenia.model.Person;
 import org.ximenia.repository.FireStationRepository;
 import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
+import org.ximenia.service.dto.ChildAlertDto;
 import org.ximenia.service.dto.PersonInfoDto;
 
 import java.time.LocalDate;
@@ -13,6 +14,7 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PersonService {
@@ -64,6 +66,38 @@ public class PersonService {
         LocalDate curDate = LocalDate.now();
         return Period.between(dob, curDate).getYears();
     }
+
+    public List<ChildAlertDto> findAllchildsUnder18ByAddress(String address) {
+        List<ChildAlertDto> result = new ArrayList<>();
+        //recup la liste des personnes habitants à cette adresse
+        List<Person> persons = personRepository.findAllPersonsByAddress(address);
+//recup la liste des medic record de -18
+        List<MedicalRecord> medicalRecords = medicalRecordRepository.findAllMedicalRecords();
+
+        //3e liste et rentrer les noms correspondant
+        for (Person person : persons) {
+            MedicalRecord medicalRecord = medicalRecordsContainsPerson(medicalRecords, person);
+            if (medicalRecord != null) {
+                ChildAlertDto dto = new ChildAlertDto();
+                dto.setFirstName(medicalRecord.getFirstName());
+                dto.setLastName(medicalRecord.getLastName());
+                dto.setAge(String.valueOf(computeAge(medicalRecord.getBirthdate())));
+                dto.setHouseholds(persons.stream().filter(p -> !p.getFirstName().equals(person.getFirstName())).collect(Collectors.toList()));
+                result.add(dto);
+            }
+        }
+        return result;
+    }
+
+    private MedicalRecord medicalRecordsContainsPerson(List<MedicalRecord> medicalRecords, Person person) {
+        for (MedicalRecord medicalRecord : medicalRecords) {
+            if (medicalRecord.getFirstName().equals(person.getFirstName()) && medicalRecord.getLastName().equals(person.getLastName())) {
+                return  medicalRecord;
+            }
+        }
+        return null;
+    }
+
 }
 
 
@@ -87,8 +121,6 @@ public class PersonService {
 //if(person.getCity(). equals(city)){
 //emails.add(person.getEmail());
 // }} return emails;
-
-
 //Version avec un stream :
 //public List<String> findAllEmailByCity(String city) {
 //return this.personRepo.findAllPersons().stream().filter(p -> p.getCity().equaols(city)).map(p -> p.getMail())

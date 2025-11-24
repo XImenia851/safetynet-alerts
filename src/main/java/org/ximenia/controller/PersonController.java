@@ -36,4 +36,10 @@ public class PersonController {
     public List<PersonInfoDto> listOfPersonsWithMedicalRecords(@RequestParam String firstName, @RequestParam String lastName){
         return this.personService.findAllpersonsWithMedicalRecords(firstName, lastName);
     }
+
+
+    @RequestMapping(value = "childAlert", method = RequestMethod.GET)
+    public List<ChildAlertDto> childsUnder18ByAddress(@RequestParam (name = "address") String address){
+        return this.personService.findAllchildsUnder18ByAddress(address);
+    }
 }

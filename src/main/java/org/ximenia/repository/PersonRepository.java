@@ -4,6 +4,7 @@ import org.springframework.stereotype.Component;
 import org.ximenia.model.Person;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class PersonRepository {
@@ -28,5 +29,11 @@ public class PersonRepository {
                 .filter(p -> p.getLastName().equals(lastName))
                 .findFirst() // Optional<Person>
                 .orElseGet(() -> new Person());
+    }
+
+    public List<Person> findAllPersonsByAddress(String address) {
+        return dataHandler.getDataContainer().getPersons().
+                stream().filter(p -> p.getAddress().
+                        equals(address)).collect(Collectors.toList());
     }
 }

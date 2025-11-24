@@ -6,6 +6,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.ximenia.model.FireStation;
 import org.ximenia.service.FireStationService;
+import org.ximenia.service.dto.FireStationDto;
+import org.ximenia.service.dto.FireStationPersonDto;
+
 import java.util.List;
 
 @RestController
@@ -26,5 +29,10 @@ public class FireStationController {
     @GetMapping("phoneAlert")
     public List<String> phoneAlert(@RequestParam("firestation") String stationNumber) {
         return fireStationService.getPhoneAlert(stationNumber);
+    }
+
+    @GetMapping("number")
+    public FireStationDto getPersonsByStation(@RequestParam("stationNumber") String stationNumber) {
+        return fireStationService.getPersonsByStation(stationNumber);
     }
 }

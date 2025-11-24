@@ -3,9 +3,11 @@ package org.ximenia.service.dto;
 public class PersonInfoDto {
 
     String lastName;
+    String firstName;
     String  email;
-    String age;
+    int age;
     String address;
+    String phone;
 
     private String[] medications;
     private String[] allergies;
@@ -18,6 +20,14 @@ public class PersonInfoDto {
         this.lastName = lastName;
     }
 
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
     public String getEmail() {
         return email;
     }
@@ -26,11 +36,11 @@ public class PersonInfoDto {
         this.email = email;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -56,5 +66,12 @@ public class PersonInfoDto {
 
     public void setAllergies(String[] allergies) {
         this.allergies = allergies;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

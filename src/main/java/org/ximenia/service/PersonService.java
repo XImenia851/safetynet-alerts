@@ -43,29 +43,24 @@ public class PersonService {
         return emails;
     }
 
-    public List<PersonInfoDto> findAllpersonsWithMedicalRecords(String firstName, String lastName) {
-        List<PersonInfoDto> result = new ArrayList<>();
-        PersonInfoDto dto = new PersonInfoDto();
 
-        Person person = personRepository.findpersonByfirstNameAndLastName(firstName, lastName);
-        MedicalRecord medicalRecord = medicalRecordRepository.findMedicalWithFirstNameAndLastName(firstName, lastName);
-
-        dto.setLastName(person.getLastName());
-        dto.setAddress(person.getAddress());
-        dto.setAge(String.valueOf(computeAge(medicalRecord.getBirthdate())));
-        dto.setEmail(person.getEmail());
-        dto.setAllergies(medicalRecord.getAllergies().toArray(new String[0]));
-        dto.setMedications(medicalRecord.getMedications().toArray(new String[0]));
-
-        result.add(dto);
-        return result;
-    }
-
-    private int computeAge(String birthdateOfPerson) {
+    public int computeAge(String birthdateOfPerson) {
         LocalDate dob = LocalDate.parse(birthdateOfPerson, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
         LocalDate curDate = LocalDate.now();
         return Period.between(dob, curDate).getYears();
     }
+
+
+    public int calculateAge(String birthdate) {
+        if (birthdate == null || birthdate.isBlank()) return 0;
+
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy");
+        LocalDate date = LocalDate.parse(birthdate, formatter);
+
+        return Period.between(date, LocalDate.now()).getYears();
+    }
+
+
 
     public List<ChildAlertDto> findAllchildsUnder18ByAddress(String address) {
         List<ChildAlertDto> result = new ArrayList<>();
@@ -98,6 +93,38 @@ public class PersonService {
         return null;
     }
 
+    public List <MedicalRecord> getMedicalRecords() {
+        return medicalRecordRepository.findAllMedicalRecords();
+    }
+
+    public List<PersonInfoDto> findAllpersonsWithMedicalRecords(String firstName, String lastName) {
+        List<PersonInfoDto> result = new ArrayList<>();
+
+        // Trouver la personne
+        Person person = personRepository.findpersonByfirstNameAndLastName(firstName, lastName);
+
+        // Trouver le dossier médical
+        MedicalRecord medicalRecord = medicalRecordRepository.findMedicalWithFirstNameAndLastName(firstName, lastName);
+
+        // Si la personne ou le dossier médical n'existe pas, retourner liste vide
+        if (person == null || medicalRecord == null) {
+            return result;
+        }
+
+        // Créer le DTO
+        PersonInfoDto dto = new PersonInfoDto();
+        dto.setFirstName(person.getFirstName());
+        dto.setLastName(person.getLastName());
+        dto.setAddress(person.getAddress());
+        dto.setEmail(person.getEmail());
+        dto.setPhone(person.getPhone());
+        dto.setAge(computeAge(medicalRecord.getBirthdate()));
+        dto.setMedications(medicalRecord.getMedications().toArray(new String[0]));
+        dto.setAllergies(medicalRecord.getAllergies().toArray(new String[0]));
+
+        result.add(dto);
+        return result;
+    }
 }
 
 

@@ -1,15 +1,15 @@
 package org.ximenia.controller;
 
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.ximenia.model.FireStation;
 import org.ximenia.service.FireStationService;
 import org.ximenia.service.dto.FireStationDto;
 import org.ximenia.service.dto.FireStationPersonDto;
+import org.ximenia.service.dto.FloodDto;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 public class FireStationController {
@@ -34,5 +34,10 @@ public class FireStationController {
     @GetMapping("number")
     public FireStationDto getPersonsByStation(@RequestParam("stationNumber") String stationNumber) {
         return fireStationService.getPersonsByStation(stationNumber);
+    }
+
+    @RequestMapping("flood/stations")
+    public FloodDto foyersListByFireStation(@RequestParam(name = "stations") int number){
+        return this.fireStationService.getFoyersByStations(number);
     }
 }

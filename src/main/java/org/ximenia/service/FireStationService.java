@@ -1,5 +1,6 @@
 package org.ximenia.service;
 
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.ximenia.model.FireStation;
 import org.ximenia.model.MedicalRecord;
@@ -9,13 +10,16 @@ import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
 import org.ximenia.service.dto.FireStationDto;
 import org.ximenia.service.dto.FireStationPersonDto;
+import org.ximenia.service.dto.FloodDto;
 import org.ximenia.service.dto.PersonInfoDto;
 
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -61,6 +65,7 @@ public class FireStationService {
                 .filter(p -> coverAddresses.contains(p.getAddress()))
                 .toList();
 
+        //transforme direct en objet que je peux utiliser plus tard
         AtomicInteger adultsCount = new AtomicInteger();
         AtomicInteger childsCount = new AtomicInteger();
 
@@ -75,7 +80,7 @@ public class FireStationService {
                     if (record != null) {
                         age = personService.computeAge(record.getBirthdate());
                     }
-
+                    //permet d'incrémenter SET GET
                     if (age > 18) {
                         adultsCount.incrementAndGet();
                     } else {
@@ -97,5 +102,47 @@ public class FireStationService {
                 personDtoList
         );
     }
+    public FloodDto getFoyersByStations(int number) {
 
+        List<String> coveredAddresses = new ArrayList<>();
+        for (FireStation fs : fireStationRepository.findAllFireStations()) {
+            coveredAddresses.add(fs.getAddress());
+        }
+
+        List<Person> personsCovered = new ArrayList<>();
+        for (Person p : personService.findAllPersons()) {
+            if (coveredAddresses.contains(p.getAddress())) {
+                personsCovered.add(p);
+            }
+        }
+
+        List<FloodDto> FloodPersonDTO = new ArrayList<>();
+
+
+        for (Person p : personsCovered) {
+            // Récupérer le record via ton repo
+            MedicalRecord record = medicalRecordRepository.findMedicalWithFirstNameAndLastName(
+                    p.getFirstName(),
+                    p.getLastName()
+            );
+
+            int age = (record != null) ? personService.computeAge(record.getBirthdate()) : 0;
+
+            FloodDto dto = new FloodDto();
+            dto.setFirstName(p.getFirstName());
+            dto.setLastName(p.getLastName());
+            dto.setPhone(p.getPhone());
+            dto.setAge(age);
+
+            if (record != null) {
+                dto.setAllergies(List.of(record.getAllergies().toArray(new String[0])));
+                dto.setMedications(List.of(record.getMedications().toArray(new String[0])));
+            }
+
+            FloodPersonDTO.add(dto);
+
+        }
+        return new FloodDto();
+
+    }
 }

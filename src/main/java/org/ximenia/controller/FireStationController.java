@@ -38,6 +38,6 @@ public class FireStationController {
 
     @RequestMapping("flood/stations")
     public FloodDto foyersListByFireStation(@RequestParam(name = "stations") int number){
-        return this.fireStationService.getFoyersByStations(number);
+        return this.fireStationService.getFoyersByStations();
     }
 }

@@ -8,10 +8,7 @@ import org.ximenia.model.Person;
 import org.ximenia.repository.FireStationRepository;
 import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
-import org.ximenia.service.dto.FireStationDto;
-import org.ximenia.service.dto.FireStationPersonDto;
-import org.ximenia.service.dto.FloodDto;
-import org.ximenia.service.dto.PersonInfoDto;
+import org.ximenia.service.dto.*;
 
 import java.time.LocalDate;
 import java.time.Period;
@@ -102,7 +99,15 @@ public class FireStationService {
                 personDtoList
         );
     }
-    public FloodDto getFoyersByStations(int number) {
+
+
+
+
+
+
+
+
+    public FloodDto getFoyersByStations() {
 
         List<String> coveredAddresses = new ArrayList<>();
         for (FireStation fs : fireStationRepository.findAllFireStations()) {
@@ -116,11 +121,10 @@ public class FireStationService {
             }
         }
 
-        List<FloodDto> FloodPersonDTO = new ArrayList<>();
-
+        List<FloodPersonDto> floodPersonDTO = new ArrayList<>();
 
         for (Person p : personsCovered) {
-            // Récupérer le record via ton repo
+
             MedicalRecord record = medicalRecordRepository.findMedicalWithFirstNameAndLastName(
                     p.getFirstName(),
                     p.getLastName()
@@ -128,21 +132,20 @@ public class FireStationService {
 
             int age = (record != null) ? personService.computeAge(record.getBirthdate()) : 0;
 
-            FloodDto dto = new FloodDto();
+            FloodPersonDto dto = new FloodPersonDto();
             dto.setFirstName(p.getFirstName());
             dto.setLastName(p.getLastName());
             dto.setPhone(p.getPhone());
             dto.setAge(age);
 
             if (record != null) {
-                dto.setAllergies(List.of(record.getAllergies().toArray(new String[0])));
-                dto.setMedications(List.of(record.getMedications().toArray(new String[0])));
+                dto.setAllergies(record.getAllergies().toArray(new String[0]));
+                dto.setMedications(record.getMedications().toArray(new String[0]));
             }
 
-            FloodPersonDTO.add(dto);
-
+            floodPersonDTO.add(dto);
         }
-        return new FloodDto();
 
+        return new FloodDto(floodPersonDTO);
     }
 }

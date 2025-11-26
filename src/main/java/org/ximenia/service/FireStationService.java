@@ -1,10 +1,13 @@
 package org.ximenia.service;
 
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 import org.ximenia.model.FireStation;
 import org.ximenia.model.MedicalRecord;
 import org.ximenia.model.Person;
+import org.ximenia.repository.DataHandler;
 import org.ximenia.repository.FireStationRepository;
 import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
@@ -27,17 +30,21 @@ public class FireStationService {
     private final PersonRepository personRepository;
     private final MedicalRecordRepository medicalRecordRepository;
     private final PersonService personService;
+    private final DataHandler dataHandler;
 
-    public FireStationService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, PersonService personService) {
+    public FireStationService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, PersonService personService, DataHandler dataHandler) {
         this.fireStationRepository = fireStationRepository;
         this.personRepository = personRepository;
         this.medicalRecordRepository = medicalRecordRepository;
         this.personService = personService;
+        this.dataHandler = dataHandler;
     }
 
     public List<FireStation> allFireStations() {
         return fireStationRepository.findAllFireStations();
     }
+
+    //--------------------------------------------------------------------------------------------------
 
     public List<String> getPhoneAlert(String stationNumber) {
         List<String> address = fireStationRepository.findAllFireStations().stream()
@@ -50,6 +57,8 @@ public class FireStationService {
                 .map(Person::getPhone)
                 .collect(Collectors.toList());
     }
+
+    //____________________________________________________________________________________________________________
 
     public FireStationDto getPersonsByStation(String stationNumber) {
         // Trouver toutes les adresses couvertes par cette station
@@ -100,13 +109,7 @@ public class FireStationService {
         );
     }
 
-
-
-
-
-
-
-
+    //-------------------------------------------------------------------
     public FloodDto getFoyersByStations() {
 
         List<String> coveredAddresses = new ArrayList<>();
@@ -147,5 +150,52 @@ public class FireStationService {
         }
 
         return new FloodDto(coveredAddresses.get(0), floodPersonDTO);
+    }
+
+    //----------------------------CRUD-----------------------------------------------
+
+    public FireStation createFireStation(FireStation fireStation) {
+        List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
+
+        // Vérifier si le mapping existe déjà
+        boolean exists = fireStations.stream()
+                .anyMatch(fs -> fs.getAddress().equals(fireStation.getAddress()));
+
+        if (exists) {
+            throw new IllegalArgumentException("FireStation mapping already exists for this address");
+        }
+
+        fireStations.add(fireStation);
+        dataHandler.save();
+        return fireStation;
+    }
+
+    //-----------------------------------------------------------------
+    public FireStation updateFireStation(FireStation fireStation) {
+        List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
+
+        for (FireStation fs : fireStations) {
+            if (fs.getAddress().equals(fireStation.getAddress())) {
+                fs.setStation(fireStation.getStation());
+                dataHandler.save();
+                return fs;
+            }
+        }
+
+        throw new IllegalArgumentException("FireStation not found");
+    }
+
+    //----------------------------------------------------------------------
+
+    public void deleteFireStation(String address) {
+        List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
+
+        boolean removed = fireStations.removeIf(fs -> fs.getAddress().equals(address));
+
+        if (!removed) {
+            throw new IllegalArgumentException("station not found");
+        }
+
+        dataHandler.save();
     }
 }

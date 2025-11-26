@@ -45,7 +45,7 @@ public class PersonService {
         }
         return emails;
     }
-
+//---------------------------------------------------------------------------------
 
     public int computeAge(String birthdateOfPerson) {
         LocalDate dob = LocalDate.parse(birthdateOfPerson, DateTimeFormatter.ofPattern("MM/dd/yyyy"));
@@ -64,7 +64,7 @@ public class PersonService {
     }
 
 
-
+//-----------------------------------------------------------------------------------------
     public List<ChildAlertDto> findAllchildsUnder18ByAddress(String address) {
         List<ChildAlertDto> result = new ArrayList<>();
         //recup la liste des personnes habitants à cette adresse
@@ -86,6 +86,8 @@ public class PersonService {
         }
         return result;
     }
+
+    //------------------------------------------------------------------------------
 
     private MedicalRecord medicalRecordsContainsPerson(List<MedicalRecord> medicalRecords, Person person) {
         for (MedicalRecord medicalRecord : medicalRecords) {
@@ -129,6 +131,10 @@ public class PersonService {
         return result;
     }
 
+
+
+    //----------------------------CRUD -----------------
+
     public Person createPerson(Person person) {
         List<Person> persons = dataHandler.getDataContainer().getPersons();
 
@@ -140,7 +146,7 @@ public class PersonService {
         dataHandler.save();
         return person;
     }
-
+//-------------------------------------------------------------------------
     public Person updatePerson(Person person) {
         List<Person> persons = dataHandler.getDataContainer().getPersons();
 
@@ -159,6 +165,21 @@ public class PersonService {
         }
 
         throw new IllegalArgumentException("Person not found");
+    }
+
+    //-----------------------------------------------------------------------
+
+    public void deletePerson(String firstName, String lastName) {
+        List<Person> persons = dataHandler.getDataContainer().getPersons();
+
+        boolean removed = persons.removeIf(p ->
+                p.getFirstName().equals(firstName) && p.getLastName().equals(lastName));
+
+        if (!removed) {
+            throw new IllegalArgumentException("Person not found");
+        }
+
+        dataHandler.save();
     }
 }
 

@@ -34,6 +34,11 @@ public class PersonController {
         return personService.updatePerson(person);
     }
 
+    @DeleteMapping("/perso")
+    public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {
+        personService.deletePerson(firstName, lastName);
+    }
+
     @GetMapping("/communityEmail")
     public List<String> findAllEmails(@RequestParam(name = "city")String email) {
         return personService.findAllEmails();

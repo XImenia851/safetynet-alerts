@@ -24,6 +24,7 @@ public class PersonService {
     private PersonRepository personRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private FireStationRepository fireStationRepository;
+    private Person p;
 
     public PersonService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, DataHandler dataHandler) {
         this.fireStationRepository = fireStationRepository;
@@ -98,6 +99,8 @@ public class PersonService {
         return null;
     }
 
+    //--------------------------------------------------------------------------------------
+
     public List <MedicalRecord> getMedicalRecords() {
         return medicalRecordRepository.findAllMedicalRecords();
     }
@@ -147,19 +150,16 @@ public class PersonService {
         return person;
     }
 //-------------------------------------------------------------------------
-    public Person updatePerson(Person person) {
-        List<Person> persons = dataHandler.getDataContainer().getPersons();
+public Person updatePerson(String firstName, String lastName, Person person) {
+
+    List<Person> persons = dataHandler.getDataContainer().getPersons();
 
         for (Person p : persons) {
-            if (p.getFirstName().equals(person.getFirstName())
-                    && p.getLastName().equals(person.getLastName())) {
+            if (p.getFirstName().equals(firstName)
+                    && p.getLastName().equals(lastName)) {
                 // Mettre à jour tous les champs sauf firstName et lastName
-                p.setAdress(person.getAddress());
-                p.setCity(person.getCity());
-                p.setZip(person.getZip());
-                p.setPhone(person.getPhone());
-                p.setEmail(person.getEmail());
-                dataHandler.save();
+                p.setFirstName(person.getFirstName());
+                p.setLastName(person.getLastName());
                 return p;
             }
         }

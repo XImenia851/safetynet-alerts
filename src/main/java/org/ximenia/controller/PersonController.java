@@ -30,9 +30,11 @@ public class PersonController {
     }
 
     @PutMapping("/person")
-    public Person updatePerson(@RequestBody Person person) {
-        return personService.updatePerson(person);
+    public Person updatePerson(@RequestParam String firstName, @RequestParam String lastName, @RequestBody Person person)
+    {
+        return personService.updatePerson(firstName, lastName, person);
     }
+
 
     @DeleteMapping("/perso")
     public void deletePerson(@RequestParam String firstName, @RequestParam String lastName) {

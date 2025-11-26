@@ -24,6 +24,16 @@ public class PersonController {
         return personService.findAllPersons();
     }
 
+    @PostMapping("/person")
+    public Person createPerson(@RequestBody Person person) {
+        return personService.createPerson(person);
+    }
+
+    @PutMapping("/person")
+    public Person updatePerson(@RequestBody Person person) {
+        return personService.updatePerson(person);
+    }
+
     @GetMapping("/communityEmail")
     public List<String> findAllEmails(@RequestParam(name = "city")String email) {
         return personService.findAllEmails();

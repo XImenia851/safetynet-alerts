@@ -146,6 +146,6 @@ public class FireStationService {
             floodPersonDTO.add(dto);
         }
 
-        return new FloodDto(floodPersonDTO);
+        return new FloodDto(coveredAddresses.get(0), floodPersonDTO);
     }
 }

@@ -3,6 +3,7 @@ package org.ximenia.service;
 import org.springframework.stereotype.Service;
 import org.ximenia.model.MedicalRecord;
 import org.ximenia.model.Person;
+import org.ximenia.repository.DataHandler;
 import org.ximenia.repository.FireStationRepository;
 import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
@@ -19,14 +20,16 @@ import java.util.stream.Collectors;
 @Service
 public class PersonService {
 
+    private final DataHandler dataHandler;
     private PersonRepository personRepository;
     private MedicalRecordRepository medicalRecordRepository;
     private FireStationRepository fireStationRepository;
 
-    public PersonService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository) {
+    public PersonService(FireStationRepository fireStationRepository, PersonRepository personRepository, MedicalRecordRepository medicalRecordRepository, DataHandler dataHandler) {
         this.fireStationRepository = fireStationRepository;
         this.personRepository = personRepository;
         this.medicalRecordRepository = medicalRecordRepository;
+        this.dataHandler = dataHandler;
     }
 
     public List<Person> findAllPersons() {
@@ -124,6 +127,38 @@ public class PersonService {
 
         result.add(dto);
         return result;
+    }
+
+    public Person createPerson(Person person) {
+        List<Person> persons = dataHandler.getDataContainer().getPersons();
+
+        boolean exists = persons.stream()
+                .anyMatch(p -> p.getFirstName().equals(person.getFirstName())
+                        && p.getLastName().equals(person.getLastName()));
+
+        persons.add(person);
+        dataHandler.save();
+        return person;
+    }
+
+    public Person updatePerson(Person person) {
+        List<Person> persons = dataHandler.getDataContainer().getPersons();
+
+        for (Person p : persons) {
+            if (p.getFirstName().equals(person.getFirstName())
+                    && p.getLastName().equals(person.getLastName())) {
+                // Mettre à jour tous les champs sauf firstName et lastName
+                p.setAdress(person.getAddress());
+                p.setCity(person.getCity());
+                p.setZip(person.getZip());
+                p.setPhone(person.getPhone());
+                p.setEmail(person.getEmail());
+                dataHandler.save();
+                return p;
+            }
+        }
+
+        throw new IllegalArgumentException("Person not found");
     }
 }
 

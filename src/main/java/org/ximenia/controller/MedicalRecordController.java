@@ -25,8 +25,8 @@ public class MedicalRecordController {
     }
 
     @PutMapping("/medicalRecord")
-    public MedicalRecord updateMedicalRecord(@RequestBody MedicalRecord medicalRecord) {
-        return medicalRecordService.updateMedicalRecord(medicalRecord);
+    public MedicalRecord updateMedicalRecord(@RequestParam String firstName, @RequestParam String lastName,@RequestBody MedicalRecord medicalRecord) {
+        return medicalRecordService.updateMedicalRecord(firstName, lastName,medicalRecord);
     }
 
     @DeleteMapping("/medicalRecord")

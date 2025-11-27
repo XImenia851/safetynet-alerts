@@ -157,7 +157,6 @@ public Person updatePerson(String firstName, String lastName, Person person) {
         for (Person p : persons) {
             if (p.getFirstName().equals(firstName)
                     && p.getLastName().equals(lastName)) {
-                // Mettre à jour tous les champs sauf firstName et lastName
                 p.setFirstName(person.getFirstName());
                 p.setLastName(person.getLastName());
                 return p;

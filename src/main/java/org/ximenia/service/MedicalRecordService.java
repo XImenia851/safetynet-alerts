@@ -47,17 +47,14 @@ public class MedicalRecordService {
     }
 
     //---------------------------------------------------------------
-    public MedicalRecord updateMedicalRecord(MedicalRecord medicalRecord) {
+    public MedicalRecord updateMedicalRecord(String firstName, String lastName, MedicalRecord medicalRecord) {
         List<MedicalRecord> medicalRecords = dataHandler.getDataContainer().getMedicalrecords();
 
         for (MedicalRecord mr : medicalRecords) {
-            if (mr.getFirstName().equals(medicalRecord.getFirstName())
-                    && mr.getLastName().equals(medicalRecord.getLastName())) {
-                // Mettre à jour tous les champs sauf firstName et lastName
-                mr.setBirthdate(medicalRecord.getBirthdate());
-                mr.setMedications(medicalRecord.getMedications());
-                mr.setAllergies(medicalRecord.getAllergies());
-                dataHandler.save();
+            if (mr.getFirstName().equals(firstName)
+                    && mr.getLastName().equals(lastName)) {
+                mr.setFirstName(medicalRecord.getFirstName());
+                mr.setLastName(medicalRecord.getLastName());
                 return mr;
             }
         }

@@ -171,13 +171,14 @@ public class FireStationService {
     }
 
     //-----------------------------------------------------------------
-    public FireStation updateFireStation(FireStation fireStation) {
+    public FireStation updateFireStation(String address, String station, FireStation fireStation) {
         List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
 
         for (FireStation fs : fireStations) {
-            if (fs.getAddress().equals(fireStation.getAddress())) {
+            if (fs.getAddress().equals(address)
+                    && fs.getStation().equals(station)) {
                 fs.setStation(fireStation.getStation());
-                dataHandler.save();
+                fs.setAddress(fireStation.getAddress());
                 return fs;
             }
         }
@@ -197,5 +198,43 @@ public class FireStationService {
         }
 
         dataHandler.save();
+    }
+
+    public List<FireDto> getFireDtoByAddress(String address) {
+
+        List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
+        List<MedicalRecord> medicalRecords = dataHandler.getDataContainer().getMedicalrecords();
+        List<Person> persons = dataHandler.getDataContainer().getPersons();
+
+        List<FireDto> fireDtos = new ArrayList<>();
+        //Recupérer les adresses pour peupler le dto
+        for (FireStation fs : fireStations) {
+            FireDto dto = new FireDto();
+
+            if (fs.getAddress().equals(address)) {
+                dto.setStation(fs.getStation());
+            }
+
+            for (Person p : persons) {
+
+                if (p.getAddress().equals(address)) {
+                    dto.setPhoneNumber(p.getPhone());
+                    dto.setFirstName(p.getFirstName());
+                    dto.setLastName(p.getLastName());
+                }
+
+
+                for (MedicalRecord mr : medicalRecords) {
+
+                    if (p.getFirstName().equals(mr.getFirstName()) && p.getLastName().equals(mr.getLastName())) {
+                        dto.setAge(personService.computeAge(mr.getBirthdate()));
+                        dto.setAllergies(mr.getAllergies());
+                        dto.setMedications(mr.getMedications());
+                    }
+                }
+            }
+            fireDtos.add(dto);
+        }
+        return fireDtos;
     }
 }

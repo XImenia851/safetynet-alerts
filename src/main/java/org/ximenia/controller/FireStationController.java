@@ -4,6 +4,7 @@ import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 import org.springframework.web.bind.annotation.*;
 import org.ximenia.model.FireStation;
 import org.ximenia.service.FireStationService;
+import org.ximenia.service.dto.FireDto;
 import org.ximenia.service.dto.FireStationDto;
 import org.ximenia.service.dto.FireStationPersonDto;
 import org.ximenia.service.dto.FloodDto;
@@ -32,8 +33,8 @@ public class FireStationController {
     }
 
     @PutMapping("/firestations")
-    public FireStation updateFireStation(@RequestBody FireStation fireStation) {
-        return fireStationService.updateFireStation(fireStation);
+    public FireStation updateFireStation(@RequestParam String address, @RequestParam String station,@RequestBody FireStation fireStation) {
+        return fireStationService.updateFireStation(address, station, fireStation);
     }
 
 
@@ -57,5 +58,10 @@ public class FireStationController {
     @RequestMapping("flood/stations")
     public FloodDto foyersListByFireStation(@RequestParam(name = "stations") int number){
         return this.fireStationService.getFoyersByStations();
+    }
+
+    @GetMapping("fire")
+    public List<FireDto> getFireStation(@RequestParam String address) {
+        return fireStationService.getFireDtoByAddress(address);
     }
 }

@@ -1,9 +1,6 @@
 package org.ximenia.service;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 import org.ximenia.model.FireStation;
 import org.ximenia.model.MedicalRecord;
 import org.ximenia.model.Person;
@@ -13,13 +10,8 @@ import org.ximenia.repository.MedicalRecordRepository;
 import org.ximenia.repository.PersonRepository;
 import org.ximenia.service.dto.*;
 
-import java.time.LocalDate;
-import java.time.Period;
-import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
@@ -200,41 +192,56 @@ public class FireStationService {
         dataHandler.save();
     }
 
-    public List<FireDto> getFireDtoByAddress(String address) {
+    //-------------------------------------------------------------------------------------------------------------
 
+    public List<FireDto> getFireDtoByAddress(String address) {
+//Les trois liste, on à besoin de toutes les donnes du JSON
         List<FireStation> fireStations = dataHandler.getDataContainer().getFirestations();
         List<MedicalRecord> medicalRecords = dataHandler.getDataContainer().getMedicalrecords();
         List<Person> persons = dataHandler.getDataContainer().getPersons();
 
+        // Liste qui contiendra un FireDto par personne habitant à l'adresse
         List<FireDto> fireDtos = new ArrayList<>();
-        //Recupérer les adresses pour peupler le dto
+
+        // Parcours de toutes les fire stations pour trouver celle de l'adresse
         for (FireStation fs : fireStations) {
-            FireDto dto = new FireDto();
 
+            // Si la fire station correspond à l'adresse recherchée
             if (fs.getAddress().equals(address)) {
-                dto.setStation(fs.getStation());
-            }
+                String stationNumber = fs.getStation();
+                //sauvegarde ce numéro dans une variable temporaire
 
-            for (Person p : persons) {
+                // Parcours de toutes les personnes pour trouver celles à cette adresse
+                for (Person p : persons) {
+                    // Si la personne habite à l'adresse recherchée
+                    if (p.getAddress().equals(address)) {
 
-                if (p.getAddress().equals(address)) {
-                    dto.setPhoneNumber(p.getPhone());
-                    dto.setFirstName(p.getFirstName());
-                    dto.setLastName(p.getLastName());
-                }
+                        // Création d'un nouveau DTO pour cette personne
+                        FireDto dto = new FireDto();
 
+                        dto.setStation(stationNumber);
+                        dto.setPhoneNumber(p.getPhone());
+                        dto.setFirstName(p.getFirstName());
+                        dto.setLastName(p.getLastName());
 
-                for (MedicalRecord mr : medicalRecords) {
+                        // Parcours des dossiers médicaux pour trouver celui de cette personne
+                        for (MedicalRecord mr : medicalRecords) {
 
-                    if (p.getFirstName().equals(mr.getFirstName()) && p.getLastName().equals(mr.getLastName())) {
-                        dto.setAge(personService.computeAge(mr.getBirthdate()));
-                        dto.setAllergies(mr.getAllergies());
-                        dto.setMedications(mr.getMedications());
+                            // Si le dossier médical correspond à la personne
+                            if (p.getFirstName().equals(mr.getFirstName()) &&
+                                    p.getLastName().equals(mr.getLastName())) {
+                                dto.setAge(personService.computeAge(mr.getBirthdate()));
+                                dto.setAllergies(mr.getAllergies());
+                                dto.setMedications(mr.getMedications());
+                            }
+                        }
+
+                        fireDtos.add(dto);
                     }
                 }
             }
-            fireDtos.add(dto);
         }
+        // Retour de la liste contenant tous les DTOs
         return fireDtos;
     }
 }

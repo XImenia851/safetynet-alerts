@@ -5,9 +5,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.ximenia.model.FireStation;
 import org.ximenia.model.Person;
 import org.ximenia.repository.FireStationRepository;
 import org.ximenia.service.dto.ChildAlertDto;
+import org.ximenia.service.dto.FireDto;
+import org.ximenia.service.dto.FireStationDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,4 +46,21 @@ public class FireStationControllerTest {
     void phoneNumberListTests() {
         assert (fireStationsController.phoneAlert(String.valueOf(4)).equals(phoneNumbers));
     }
+
+    @Test
+    void personListByFireStationTests() {
+        FireStationDto result = fireStationsController.getPersonsByStation(String.valueOf(2));
+        assert (result.getPeople().get(0).getFirstName().equals("Jonanathan"));
+    }
+
+    @Test
+    void allFireStationsTest() {
+        // WHEN - Appel du controller
+        List<FireStation> result = fireStationsController.allFireStations();
+
+        // THEN - Vérifications
+        assert (!result.isEmpty());  // La liste n'est pas vide
+        assert (result.get(0).getAddress() != null);  // Les adresses existent
+    }
+
 }

@@ -17,3 +17,4 @@ public class FireStationRepository {
         return dataHandler.getDataContainer().getFirestations();
     }
 }
+

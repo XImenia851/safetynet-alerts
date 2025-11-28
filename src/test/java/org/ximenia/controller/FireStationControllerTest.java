@@ -11,6 +11,7 @@ import org.ximenia.repository.FireStationRepository;
 import org.ximenia.service.dto.ChildAlertDto;
 import org.ximenia.service.dto.FireDto;
 import org.ximenia.service.dto.FireStationDto;
+import org.ximenia.service.dto.FloodDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class FireStationControllerTest {
         assert (!result.isEmpty());  // La liste n'est pas vide
         assert (result.get(0).getAddress() != null);  // Les adresses existent
     }
-
+//-----------------------------------------------------------------------------------------------------------
     @Test
     void createFireStationTest() {
         // fire station à créer
@@ -113,4 +114,33 @@ public class FireStationControllerTest {
         assert (!exists);  // verifie que l'adress existe pas
     }
 
+    @Test
+    void getFireStationByAddressTest() {
+        // GIVEN - Adresse à tester
+        String address = "644 Gershwin Cir";
+
+        // WHEN - Appel du controller
+        List<FireDto> result = fireStationsController.getFireStation(address);
+
+        // THEN - Vérifications
+        assert (!result.isEmpty());  // La liste n'est pas vide
+        assert (result.get(0).getFirstName().equals("Peter"));  // Première personne est Peter
+        assert (result.get(0).getLastName().equals("Duncan"));  // Son nom est Duncan
+        assert (result.get(0).getStation().equals("1"));  // Station numéro 1
+    }
+
+    @Test
+    void foyersListByFireStationTest() {
+        // GIVEN - Numéro de station à tester
+        int stationNumber = 2;
+
+        // WHEN - Appel du controller
+        FloodDto result = fireStationsController.foyersListByFireStation(stationNumber);
+
+        // THEN - Vérifications
+        assert (result != null);  // Le résultat n'est pas null
+        assert (!result.getFoyers().isEmpty());  // Il y a des foyers dans la liste
+        // Vérification qu'un foyer contient bien des personnes
+        assert (result.getFoyers().get(0).getAge() > 0);
+    }
 }

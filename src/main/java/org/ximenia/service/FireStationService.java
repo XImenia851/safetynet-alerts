@@ -210,13 +210,15 @@ public class FireStationService {
             if (fs.getAddress().equals(address)) {
                 String stationNumber = fs.getStation();
                 //sauvegarde ce numéro dans une variable temporaire
+                //fs.getStation() = appel de méthode, sauvegarde l'info avant de sortir de la boucle,
+                // évite des appels multiples à la même méthode
 
                 // Parcours de toutes les personnes pour trouver celles à cette adresse
                 for (Person p : persons) {
-                    // Si la personne habite à l'adresse recherchée
+                    //cette personne habite bien à l'adresse demandée ?
                     if (p.getAddress().equals(address)) {
 
-                        // Création d'un nouveau DTO pour cette personne
+                        // Remplissage du DTO avec les informations de cette personne
                         FireDto dto = new FireDto();
 
                         dto.setStation(stationNumber);
@@ -224,10 +226,13 @@ public class FireStationService {
                         dto.setFirstName(p.getFirstName());
                         dto.setLastName(p.getLastName());
 
+                        //Le principe : 1 personne trouvée = 1 dto créé et rempli
+
                         // Parcours des dossiers médicaux pour trouver celui de cette personne
                         for (MedicalRecord mr : medicalRecords) {
 
                             // Si le dossier médical correspond à la personne
+                            //On compare le prénom ET le nom pour être sûr que c'est la bonne personne
                             if (p.getFirstName().equals(mr.getFirstName()) &&
                                     p.getLastName().equals(mr.getLastName())) {
                                 dto.setAge(personService.computeAge(mr.getBirthdate()));

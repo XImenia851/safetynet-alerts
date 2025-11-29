@@ -63,7 +63,7 @@ public class FireStationControllerTest {
         assert (!result.isEmpty());  // La liste n'est pas vide
         assert (result.get(0).getAddress() != null);  // Les adresses existent
     }
-//-----------------------------------------------------------------------------------------------------------
+//-----------------------------------------CRUD------------------------------------------------------------------
     @Test
     void createFireStationTest() {
         // fire station à créer
@@ -113,7 +113,7 @@ public class FireStationControllerTest {
 
         assert (!exists);  // verifie que l'adress existe pas
     }
-
+//-----------------------------------------------------------------------------
     @Test
     void getFireStationByAddressTest() {
         // GIVEN - Adresse à tester
@@ -128,7 +128,7 @@ public class FireStationControllerTest {
         assert (result.get(0).getLastName().equals("Duncan"));  // Son nom est Duncan
         assert (result.get(0).getStation().equals("1"));  // Station numéro 1
     }
-
+//----------------------------------------------------------------------
     @Test
     void foyersListByFireStationTest() {
         // GIVEN - Numéro de station à tester
